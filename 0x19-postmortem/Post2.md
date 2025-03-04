@@ -3,8 +3,8 @@
 ## Issue Summary
 
 **Duration:**  
-Start: June 7, 2024, 10:00 AM (WAT)  
-End: June 7, 2024, 12:30 PM (WAT)
+Start: March 2, 2025, 10:00 AM (WAT)  
+End: March 2, 2025, 12:30 PM (WAT)
 
 **Impact:**  
 Our beloved web application took a nap, and when it woke up, it decided to move in slow motion. Page load times skyrocketed from a snappy 1 second to a leisurely 30 seconds. About 80% of users were affected, experiencing delays and intermittent timeouts. Cue the flood of customer complaints and a significant dent in our revenue.
