@@ -1,31 +1,29 @@
 #!/usr/bin/python3
-"""Script contains recurse function"""
-import requests
+"""
+Returns lists containing titles of all hot articles
+"""
+from requests import get
+from sys import argv
 
 
-def recurse(subreddit, hot_list=[], after="", count=0):
-    """Returns a list of titles of all hot posts on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "0x16-api_advanced:project:\
-v1.0.0 (by /u/firdaus_cartoon_jr)"
-    }
-    params = {
-        "after": after,
-        "count": count,
-        "limit": 100
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
+def recurse(subreddit, hot_list=[], after=None):
+    """ Return list of hot articles """
+    head = {'User-Agent': 'Avery Harper'}
+    try:
+        if after:
+            count = get('https://www.reddit.com/r/{}/hot.json?after={}'.format(
+                subreddit, after), headers=head).json().get('data')
+        else:
+            count = get('https://www.reddit.com/r/{}/hot.json'.format(
+                subreddit), headers=head).json().get('data')
+        hot_list += [dic.get('data').get('title')
+                     for dic in count.get('children')]
+        if count.get('after'):
+            return recurse(subreddit, hot_list, after=count.get('after'))
+        return hot_list
+    except Exception:
         return None
 
-    results = response.json().get("data")
-    after = results.get("after")
-    count += results.get("dist")
-    for c in results.get("children"):
-        hot_list.append(c.get("data").get("title"))
 
-    if after is not None:
-        return recurse(subreddit, hot_list, after, count)
-    return hot_list
+if __name__ == "__main__":
+    recurse(argv[1])

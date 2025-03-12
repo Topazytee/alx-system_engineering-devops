@@ -1,22 +1,21 @@
 #!/usr/bin/python3
-"""Script contains top_ten function"""
-import requests
+"""
+Print titles of first 10 hot posts
+"""
+from requests import get
+from sys import argv
 
 
 def top_ten(subreddit):
-    """Print the titles of the 10 hottest posts on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "0x16-api_advanced:project:\
-v1.0.0 (by /u/firdaus_cartoon_jr)"
-    }
-    params = {
-        "limit": 10
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
-        print("None")
-        return
-    results = response.json().get("data")
-    [print(c.get("data").get("title")) for c in results.get("children")]
+    """ Return hot posts """
+    head = {'User-Agent': 'Avery Harper'}
+    try:
+        count = get('https://www.reddit.com/r/{}/hot.json?count=10'.format(
+            subreddit), headers=head).json().get('data').get('children')
+        print('\n'.join([dic.get('data').get('title') for dic in count][:10]))
+    except Exception:
+        print('None')
+
+
+if __name__ == "__main__":
+    top_ten(argv[1])
